@@ -1,1 +1,40 @@
-
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: gitops
+  name: gitops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitops
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: gitops
+    spec:
+      containers:
+      - image: timcicd/gitops:0d84d253f610036588f8ca787ccea31fec4a38bd
+        ports:
+            - containerPort: 8082
+        name: gitops
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb-service
+  labels:
+    app: lb-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8082
+    targetPort: 8082
+  selector:
+    app: gitops
