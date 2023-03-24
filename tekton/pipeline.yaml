@@ -1,0 +1,53 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: clone-build-push
+spec:
+  description: | 
+    This pipeline clones a git repo, builds a Docker image with Kaniko and
+    pushes it to a registry
+  params:
+  - name: revision
+    type: string
+  workspaces:
+  - name: shared-data
+  - name: docker-credentials
+  tasks:
+  - name: fetch-source
+    taskRef:
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: shared-data
+    params:
+    - name: url
+      value: https://github.com/Tim-Wasl/GitOps-Code.git
+  - name: build-gradle
+    runAfter: ["fetch-source"]
+    taskRef:
+      name: gradle
+    workspaces:
+    - name: source
+      workspace: shared-data
+    params:
+    - name: PROJECT_DIR
+      value: ./gitops-code
+    - name: GRADLE_IMAGE
+      value: gradle:7.6-jdk17
+  - name: build-push
+    runAfter: ["build-gradle"]
+    taskRef:
+      name: kaniko
+    workspaces:
+    - name: source
+      workspace: shared-data
+    - name: dockerconfig
+      workspace: docker-credentials
+    params:
+    - name: IMAGE
+      value: docker.io/timcicd/gitops:$(params.revision)
+    - name: DOCKERFILE
+      value: ./gitops-code/Dockerfile
+    - name: EXTRA_ARGS
+      value: [--build-arg=JAR_FILE=./gitops-code/build/libs/gitops-code-0.0.1-SNAPSHOT.jar]
+    
