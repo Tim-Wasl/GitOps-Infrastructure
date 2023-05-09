@@ -28,4 +28,4 @@ spec:
   - name: docker-path
     value: ./gitops-code/Dockerfile
   - name: revision
-    value: 1
+    value: test
