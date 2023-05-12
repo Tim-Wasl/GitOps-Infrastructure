@@ -2,6 +2,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
   name: github-pr-pipeline-template
+  namespace: tekton
 spec:
   params:
     - name: revision
