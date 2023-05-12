@@ -7,3 +7,5 @@ spec:
   params:
     - name: revision
       value: $(body.pull_request.head.sha)
+  triggerTemplate:
+    name: github-pr-pipeline-template
