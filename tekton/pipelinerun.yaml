@@ -28,3 +28,5 @@ spec:
     value: docker.io/timcicd/gitops:latest
   - name: docker-path
     value: ./gitops-code/Dockerfile
+  - name: revision
+    value: $(tt.params.revision)
