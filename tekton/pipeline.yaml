@@ -6,9 +6,6 @@ spec:
   description: | 
     This pipeline clones a git repo, builds a Docker image with Kaniko and
     pushes it to a registry
-  params:
-  - name: revision
-    type: string
   workspaces:
   - name: shared-data
   - name: docker-credentials
@@ -45,7 +42,7 @@ spec:
       workspace: docker-credentials
     params:
     - name: IMAGE
-      value: docker.io/timcicd/gitops:$(params.revision)
+      value: docker.io/timcicd/gitops:$(tt.params.revision)
     - name: DOCKERFILE
       value: ./gitops-code/Dockerfile
     - name: EXTRA_ARGS
