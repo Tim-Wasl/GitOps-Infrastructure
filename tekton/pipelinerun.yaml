@@ -29,4 +29,4 @@ spec:
   - name: docker-path
     value: ./gitops-code/Dockerfile
   - name: revision
-    value: 1 #$(tt.params.revision)
+    value: $(tt.params.revision)
